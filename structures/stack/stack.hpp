@@ -21,16 +21,33 @@ public:
   }
 
   void push(_ElType el) {
-      _elements[++_top] = el;
+    if (_size <= _top) {
+      resize(_size*2);
+      _size = _size << 1;
+    }
+
+    _elements[++_top] = el;
   }
 
   void pop() {
+    if (_top == -1)
+      throw StackEmptyException();
+      
     --_top;
   }
 
   void resize(const int size) {
     _ElType* newElements = new _ElType[size];
     std::copy(newElements, newElements+_size, newElements);
+    delete _elements;
     _elements = newElements;
+  }
+
+  size_t size() const {
+    return _size;
+  }
+
+  void clear() {
+    _top = -1;
   }
 };
